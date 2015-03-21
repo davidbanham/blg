@@ -1,0 +1,24 @@
+{
+  "name": "blg",
+  "version": "1.0.0",
+  "description": "blerg",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js",
+    "docs": "prmd combine --meta meta.json schemata > schema.json && prmd verify schema.json && prmd doc schema.json > api_spec.md",
+    "bundle": "./node_modules/.bin/browserify index.js > bundle.js"
+  },
+  "keywords": [
+    "blog"
+  ],
+  "author": "david@banham.id.au",
+  "license": "ISC",
+  "dependencies": {
+    "knox": "^0.9.2",
+    "lodash": "^3.5.0",
+    "pouchdb": "^3.3.1"
+  },
+  "devDependencies": {
+    "browserify": "^9.0.3"
+  }
+}
