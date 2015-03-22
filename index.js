@@ -15,7 +15,7 @@ db.get('s3_credentials', function(err, doc) {
     barf(err);
   };
   var doc = doc || {_id: 's3_credentials'};
-  ['key', 'bucket', 'secret'].forEach(function(prop) {
+  ['key', 'secret', 'bucket'].forEach(function(prop) {
     if (!doc[prop]) {
       var input = prompt('Please enter your S3 ' + prop);
       doc[prop] = input;
