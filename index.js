@@ -78,6 +78,7 @@ window.post_from_dom = function() {
 var create_post = function(title, content) {
   var now = new Date().toISOString();
   return {
+    _id: title,
     created_at: now,
     updated_at: now,
     title: title,
