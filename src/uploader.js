@@ -1,19 +1,12 @@
-var knox = require('knox');
+var AWS = require('aws-sdk');
 
 module.exports = function(key, secret, bucket) {
-  var client = knox.createClient({
-    key: key,
-    secret: secret,
-    bucket: bucket
-  });
+  AWS.config.accessKeyId = key;
+  AWS.config.secretAccessKey = secret;
+  var s3 = new AWS.S3({params: {Bucket: bucket}});
 
   var upload = function(doc, cb) {
-    var req = client.put(doc.title, {'x-amz-acl': 'public-read'});
-    req.on('response', function(res) {
-      if (res.statusCode === 200) return cb(null);
-      return cb(new Error(res.statusCode));
-    });
-    req.end(doc.content);
+    s3.upload({Body: doc.content, Key: doc.title}, cb);
   };
 
   return function(docs, cb) {
