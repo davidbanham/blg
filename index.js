@@ -26,22 +26,31 @@ db.get('s3_credentials', function(err, doc) {
   db.post(doc, barf);
 });
 
-var show_past_blogs = function() {
+var all_posts = function(cb) {
   db.query('posts/by_time', {
     include_docs: true,
     descending: true
   }, function(err, res) {
-    barf(err);
-    var posts_container = document.getElementById('old_posts');
-    posts_container.innerHTML = '';
-
+    if (err) return cb(err);
     var posts = res.rows.map(function(row) {
       return row.doc;
     });
+    cb(null, posts);
+  });
+};
 
-    console.log(indexer(posts));
-    posts_container.contentDocument.write(indexer(posts));
+var gen_index = function(cb) {
+  all_posts(function(err, posts) {
+    if (err) return cb(err);
+    return cb(null, indexer(posts));
+  });
+};
 
+var show_past_blogs = function() {
+  gen_index(function(err, html) {
+    barf(err);
+    var posts_container = document.getElementById('old_posts');
+    posts_container.contentDocument.write(html);
   });
 };
 
@@ -80,10 +89,14 @@ var save_and_publish = function(doc, cb) {
     barf(err);
     doc._id = stub.id
     doc._rev = stub.rev
-    upload([doc], function(errs, docs) {
-      barf(errs[0]);
-      var marked_doc = marker(errs, docs)[0];
-      db.post(marked_doc, cb);
+    gen_index(function(err, index) {
+      barf(err);
+      var index_doc = {title: 'index', content: index};
+      upload([doc, index_doc], function(errs, docs) {
+        barf(_.compact(errs).length ? errs : null);
+        var marked_doc = marker(errs, docs)[0];
+        db.post(marked_doc, cb);
+      });
     });
   });
 };
