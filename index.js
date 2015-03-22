@@ -42,15 +42,17 @@ var all_posts = function(cb) {
 var gen_index = function(cb) {
   all_posts(function(err, posts) {
     if (err) return cb(err);
-    return cb(null, indexer(posts));
+    var index_content = indexer(posts);
+    return cb(null, {title: 'index', content: index_content, path: 'index.html'});
   });
 };
 
 var show_past_blogs = function() {
-  gen_index(function(err, html) {
+  gen_index(function(err, index_doc) {
     barf(err);
     var posts_container = document.getElementById('old_posts');
-    posts_container.contentDocument.write(html);
+    posts_container.contentDocument.write(index_doc.content);
+    posts_container.contentDocument.close();
   });
 };
 
@@ -89,9 +91,8 @@ var save_and_publish = function(doc, cb) {
     barf(err);
     doc._id = stub.id
     doc._rev = stub.rev
-    gen_index(function(err, index) {
+    gen_index(function(err, index_doc) {
       barf(err);
-      var index_doc = {title: 'index', content: index};
       upload([doc, index_doc], function(errs, docs) {
         barf(errs);
         var marked_doc = marker(errs, docs)[0];
