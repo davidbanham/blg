@@ -1,5 +1,6 @@
 var _ = require('lodash');
 var db = require('./src/db.js');
+var indexer = require('./src/indexer.js');
 var upload = null;
 
 window.db = db;
@@ -34,17 +35,13 @@ var show_past_blogs = function() {
     var posts_container = document.getElementById('old_posts');
     posts_container.innerHTML = '';
 
-    res.rows.forEach(function(post) {
-      var container = document.createElement('div');
-
-      [{prop: 'title', elem: 'h2'}, {prop: 'content', elem: 'p'}].forEach(function(item) {
-        var cur = document.createElement(item.elem);
-        cur.textContent = post.doc[item.prop];
-        container.appendChild(cur);
-      });
-
-      posts_container.appendChild(container);
+    var posts = res.rows.map(function(row) {
+      return row.doc;
     });
+
+    console.log(indexer(posts));
+    posts_container.contentDocument.write(indexer(posts));
+
   });
 };
 
