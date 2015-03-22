@@ -6,7 +6,7 @@ var upload = null;
 window.db = db;
 
 var barf = function(err) {
-  if (!err) return;
+  if (!_.compact(_.flatten([err])).length) return;
   alert(err);
   throw(err);
 };
@@ -93,7 +93,7 @@ var save_and_publish = function(doc, cb) {
       barf(err);
       var index_doc = {title: 'index', content: index};
       upload([doc, index_doc], function(errs, docs) {
-        barf(_.compact(errs).length ? errs : null);
+        barf(errs);
         var marked_doc = marker(errs, docs)[0];
         db.post(marked_doc, cb);
       });
