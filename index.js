@@ -14,7 +14,7 @@ db.get('s3_credentials', function(err, doc) {
   if (err && err.status != 404) {
     barf(err);
   };
-  var doc = doc || {id: 's3_credentials'};
+  var doc = doc || {_id: 's3_credentials'};
   ['key', 'bucket', 'secret'].forEach(function(prop) {
     if (!doc[prop]) {
       var input = prompt('Please enter your S3 ' + prop);
@@ -65,7 +65,7 @@ var create_post = function(title, content) {
 var save_and_publish = function(doc, cb) {
   db.post(doc, function(err, stub) {
     barf(err);
-    doc.id = stub.id
+    doc._id = stub._id
     upload([doc], function(errs, docs) {
       barf(errs[0]);
       var marked_doc = marker(errs, docs)[0];
