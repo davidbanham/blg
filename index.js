@@ -103,6 +103,20 @@ var save_and_publish = function(doc, cb) {
   });
 };
 
+var publish_all = function(cb) {
+  all_posts(function(err, docs) {
+    barf(err);
+    gen_index(function(err, index_doc) {
+      docs.push(index_doc);
+      upload(docs, function(errs, docs) {
+        barf(errs);
+      });
+    });
+  });
+};
+
+window.publish_all = publish_all;
+
 var marker = function(errs, docs) {
   var zipped = _.zip(errs, docs);
   return zipped.map(function(pair){
