@@ -25,23 +25,30 @@ db.get('s3_credentials', function(err, doc) {
   db.post(doc, barf);
 });
 
-db.query('posts/by_time', {
-  include_docs: true,
-  descending: true
-}, function(err, res) {
-  barf(err);
-  res.rows.forEach(function(post) {
-    var container = document.createElement('div');
+var show_past_blogs = function() {
+  db.query('posts/by_time', {
+    include_docs: true,
+    descending: true
+  }, function(err, res) {
+    barf(err);
+    var posts_container = document.getElementById('old_posts');
+    posts_container.innerHTML = '';
 
-    [{prop: 'title', elem: 'h2'}, {prop: 'content', elem: 'p'}].forEach(function(item) {
-      var cur = document.createElement(item.elem);
-      cur.textContent = post.doc[item.prop];
-      container.appendChild(cur);
+    res.rows.forEach(function(post) {
+      var container = document.createElement('div');
+
+      [{prop: 'title', elem: 'h2'}, {prop: 'content', elem: 'p'}].forEach(function(item) {
+        var cur = document.createElement(item.elem);
+        cur.textContent = post.doc[item.prop];
+        container.appendChild(cur);
+      });
+
+      posts_container.appendChild(container);
     });
-
-    document.getElementById('old_posts').appendChild(container);
   });
-});
+};
+
+show_past_blogs();
 
 window.post_from_dom = function() {
   var title_node = document.getElementById('new_post_title');
@@ -54,8 +61,9 @@ window.post_from_dom = function() {
 
   save_and_publish(new_post, function(err) {
     barf(err);
-    title_node.textContent = '';
-    content_node.textContent = '';
+    title_node.textContent = 'Title';
+    content_node.textContent = 'New Post';
+    show_past_blogs();
   });
 };
 
