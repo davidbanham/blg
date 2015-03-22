@@ -73,7 +73,8 @@ var create_post = function(title, content) {
 var save_and_publish = function(doc, cb) {
   db.post(doc, function(err, stub) {
     barf(err);
-    doc._id = stub._id
+    doc._id = stub.id
+    doc._rev = stub.rev
     upload([doc], function(errs, docs) {
       barf(errs[0]);
       var marked_doc = marker(errs, docs)[0];
