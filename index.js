@@ -82,7 +82,8 @@ var create_post = function(title, content) {
     updated_at: now,
     title: title,
     content: content,
-    type: 'post'
+    type: 'post',
+    path: 'articles/'+encodeURIComponent(title.replace(/ /g, '_'))+'.html'
   };
 };
 
