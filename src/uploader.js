@@ -1,12 +1,14 @@
 var AWS = require('aws-sdk');
 
+var SUBFOLDER = 'articles/'
+
 module.exports = function(key, secret, bucket) {
   AWS.config.accessKeyId = key;
   AWS.config.secretAccessKey = secret;
   var s3 = new AWS.S3({params: {Bucket: bucket}});
 
   var upload = function(doc, cb) {
-    s3.upload({Body: doc.content, Key: doc.title+'.html', ContentType: 'text/html'}, cb);
+    s3.upload({Body: doc.content, Key: SUBFOLDER + doc.title + '.html', ContentType: 'text/html'}, cb);
   };
 
   return function(docs, cb) {
