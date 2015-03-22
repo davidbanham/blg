@@ -75,7 +75,7 @@ var save_and_publish = function(doc, cb) {
 };
 
 var marker = function(errs, docs) {
-  var zipped = _.zip(err, docs);
+  var zipped = _.zip(errs, docs);
   return zipped.map(function(pair){
     var err = pair[0];
     var doc = pair[1];
