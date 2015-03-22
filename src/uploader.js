@@ -6,7 +6,7 @@ module.exports = function(key, secret, bucket) {
   var s3 = new AWS.S3({params: {Bucket: bucket}});
 
   var upload = function(doc, cb) {
-    s3.upload({Body: doc.content, Key: doc.title}, cb);
+    s3.upload({Body: doc.content, Key: doc.title+'.html', ContentType: 'text/html'}, cb);
   };
 
   return function(docs, cb) {
