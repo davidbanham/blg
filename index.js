@@ -31,7 +31,15 @@ db.query('posts/by_time', {
 }, function(err, res) {
   barf(err);
   res.rows.forEach(function(post) {
-    document.getElementById('old_posts').textContent = post.content;
+    var container = document.createElement('div');
+
+    [{prop: 'title', elem: 'h2'}, {prop: 'content', elem: 'p'}].forEach(function(item) {
+      var cur = document.createElement(item.elem);
+      cur.textContent = post.doc[item.prop];
+      container.appendChild(cur);
+    });
+
+    document.getElementById('old_posts').appendChild(container);
   });
 });
 
