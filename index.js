@@ -1,6 +1,6 @@
 var _ = require('lodash');
 var db = require('./src/db.js');
-var util = require('./src/util.js');
+var util = require('./src/util.js')();
 var indexer = require('./src/indexer.js');
 var upload = null;
 
@@ -37,7 +37,7 @@ window.post_from_dom = function() {
 
   var new_post = util.create_post(new_title, new_content);
 
-  save_and_publish(new_post, function(err) {
+  util.save_and_publish(new_post, function(err) {
     util.barf(err);
     title_node.textContent = 'Title';
     content_node.textContent = 'New Post';
@@ -45,4 +45,4 @@ window.post_from_dom = function() {
   });
 };
 
-window.publish_all = publish_all;
+window.publish_all = util.publish_all;

@@ -1,4 +1,7 @@
 var db = require('./db.js');
+var _ = require('lodash');
+var indexer = require('./indexer.js');
+var post_renderer = require('./post_renderer.js');
 
 var barf = function(err) {
   if (!_.compact(_.flatten([err])).length) return;
@@ -26,13 +29,33 @@ var all_posts = function(cb) {
 
 var upload;
 
-var publish = function(docs, cb) {
+var publish = function(num, cb) {
   all_posts(function(err, posts) {
     if (err) return cb(err);
     compile_index(posts, function(err, index_doc) {
-      docs.push(index_doc);
-      upload(docs, cb);
+      posts = historian(posts);
+      posts = render_posts(posts);
+      posts.unshift(index_doc);
+      if (num) num = num + 2;
+      upload(posts.slice(0, num), cb);
     });
+  });
+};
+
+var historian = function(docs) {
+  return docs.map(function(doc, i, arr) {
+    var next = arr[i - 1];
+    var previous = arr[i + 1];
+    if (next) doc.next = next;
+    if (previous) doc.previous = previous;
+    return doc;
+  });
+};
+
+var render_posts = function(docs) {
+  return docs.map(function(doc) {
+    doc.rendered = post_renderer(doc);
+    return doc;
   });
 };
 
@@ -97,9 +120,9 @@ module.exports = function() {
       });
     },
     publish_all: function() {
-      util.all_posts(function(err, docs) {
+      all_posts(function(err, docs) {
         if (err) return cb(err);
-        publish(docs, barf);
+        publish(undefined, barf);
       });
     },
     save_and_publish: function(doc, cb) {
@@ -107,8 +130,10 @@ module.exports = function() {
         if (err) return cb(err);
         doc._id = stub.id
         doc._rev = stub.rev
-        publish([doc], cb);
+        publish(1, cb);
       });
-    }
+    },
+    historian: historian,
+    compile_index: compile_index
   };
 };
