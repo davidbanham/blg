@@ -9,6 +9,7 @@ window.db = db;
 var gen_index = function(cb) {
   util.all_posts(function(err, posts) {
     if (err) return cb(err);
+    posts = util.markup(posts);
     util.compile_index(posts, function(err, index_doc) {
       if (err) return cb(err);
       var index_content = indexer(posts);

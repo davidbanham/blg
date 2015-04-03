@@ -1,7 +1,12 @@
 var db = require('./db.js');
 var _ = require('lodash');
+var marked = require('marked');
 var indexer = require('./indexer.js');
 var post_renderer = require('./post_renderer.js');
+
+marked.setOptions({
+  sanitize: false
+});
 
 var barf = function(err) {
   if (!_.compact(_.flatten([err])).length) return;
@@ -27,11 +32,20 @@ var all_posts = function(cb) {
   });
 };
 
+var markup = function(posts) {
+  return posts.map(function(post) {
+    post.content = post.content.replace(/<br>/g, '\n');
+    post.content = marked(post.content);
+    return post;
+  });
+};
+
 var upload;
 
 var publish = function(num, cb) {
   all_posts(function(err, posts) {
     if (err) return cb(err);
+    posts = markup(posts);
     compile_index(posts, function(err, index_doc) {
       posts = historian(posts);
       posts = render_posts(posts);
@@ -134,6 +148,7 @@ module.exports = function() {
       });
     },
     historian: historian,
-    compile_index: compile_index
+    compile_index: compile_index,
+    markup: markup
   };
 };
