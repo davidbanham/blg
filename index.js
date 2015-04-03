@@ -58,7 +58,7 @@ window.addImages = function (evt) {
     reader.onload = function(e) {
       var img = document.createElement('img');
       img.src = e.target.result;
-      img.style = 'max-width: 100%;'
+      img.style.cssText = 'max-width: 100%;'
       document.getElementById('new_post').appendChild(img);
     };
     reader.readAsDataURL(file);
