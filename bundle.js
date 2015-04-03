@@ -61,7 +61,7 @@ window.addImages = function (evt) {
     reader.onload = function (e) {
       var img = document.createElement("img");
       img.src = e.target.result;
-      img.style = "max-width: 100%;";
+      img.style.cssText = "max-width: 100%;";
       document.getElementById("new_post").appendChild(img);
     };
     reader.readAsDataURL(file);
@@ -54984,7 +54984,6 @@ var all_posts = function all_posts(cb) {
 
 var markup = function markup(posts) {
   return posts.map(function (post) {
-    console.log(post.content);
     post.content = post.content.replace(/<br>/g, "\n");
     post.content = marked(post.content);
     return post;
