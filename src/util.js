@@ -51,7 +51,10 @@ var publish = function(num, cb) {
       posts = render_posts(posts);
       posts.unshift(index_doc);
       if (num) num = num + 2;
-      upload(posts.slice(0, num), cb);
+      var onupdate = function(title, percentage) {
+        document.getElementById('status').textContent = title + ': ' + Math.floor(percentage * 100) + '%';
+      };
+      upload(posts.slice(0, num), onupdate, cb);
     });
   });
 };
