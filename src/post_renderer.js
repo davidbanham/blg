@@ -4,7 +4,7 @@ var template = `
 <body>
   <a href="/">Home</a>
   <h2>{{title}}</h2>
-  <p>{{content}}</p>
+  <p>{{{content}}}</p>
   <a href="/{{previous.path}}">{{previous.title}}</a>
   <a href="/{{next.path}}">{{next.title}}</a>
 </body>

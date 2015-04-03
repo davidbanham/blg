@@ -1,13 +1,18 @@
 <html>
 <head>
-  <script src="./bundle.js"></script>
 </head>
 <body>
   <div contenteditable id="new_post_title">Title</div>
   <div contenteditable id="new_post">New Post</div>
+  <br>
+  <form enctype="multipart/form-data" method="post">
+    <label for="imagesToAdd">Insert images</label><br />
+    <input type="file" name="imagesToAdd[]" id="imagesToAdd" multiple="multiple" />
+  </form>
   <button onclick="post_from_dom()">Submit</button>
   <button onclick="publish_all()">Publish All</button>
   <br>
   <iframe id="old_posts" style="width: 100%; height: 100%;"></iframe>
+  <script src="./bundle.js"></script>
 </body>
 </html>
