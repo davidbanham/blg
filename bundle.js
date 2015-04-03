@@ -54927,14 +54927,18 @@ module.exports = function (key, secret, bucket) {
   AWS.config.secretAccessKey = secret;
   var s3 = new AWS.S3({ params: { Bucket: bucket } });
 
-  var upload = function upload(doc, cb) {
-    s3.upload({ Body: doc.rendered || doc.content, Key: doc.path, ContentType: "text/html" }, cb);
+  var upload = function upload(doc, onupdate, cb) {
+    var managedUpload = s3.upload({ Body: doc.rendered || doc.content, Key: doc.path, ContentType: "text/html" }, cb);
+
+    managedUpload.on("httpUploadProgress", function (progress) {
+      onupdate(doc.title, progress.loaded / progress.total);
+    });
   };
 
-  return function (docs, cb) {
+  return function (docs, onupdate, cb) {
     var errs = [];
     docs.forEach(function (doc) {
-      upload(doc, function (err) {
+      upload(doc, onupdate, function (err) {
         errs.push(err);
         if (errs.length === docs.length) {
           cb(errs, docs);
@@ -55001,7 +55005,10 @@ var publish = function publish(num, cb) {
       posts = render_posts(posts);
       posts.unshift(index_doc);
       if (num) num = num + 2;
-      upload(posts.slice(0, num), cb);
+      var onupdate = function onupdate(title, percentage) {
+        document.getElementById("status").textContent = title + ": " + Math.floor(percentage * 100) + "%";
+      };
+      upload(posts.slice(0, num), onupdate, cb);
     });
   });
 };
