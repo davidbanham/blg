@@ -51,9 +51,6 @@ var publish = function(num, cb) {
       posts = render_posts(posts);
       posts.unshift(index_doc);
       if (num) num = num + 2;
-      var onupdate = function(title, percentage) {
-        document.getElementById('status').textContent = title + ': ' + Math.floor(percentage * 100) + '%';
-      };
       upload(posts.slice(0, num), onupdate, cb);
     });
   });
@@ -76,7 +73,9 @@ var render_posts = function(docs) {
   });
 };
 
-module.exports = function() {
+var onupdate = null;
+module.exports = function(local_onupdate) {
+  onupdate = local_onupdate;
   db.get('s3_credentials', function(err, doc) {
     if (err && err.status != 404) {
       barf(err);

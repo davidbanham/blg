@@ -1,6 +1,9 @@
 var _ = require('lodash');
 var db = require('./src/db.js');
-var util = require('./src/util.js')();
+var onupdate = function(title, percentage) {
+  document.getElementById('status').textContent = title + ': ' + Math.floor(percentage * 100) + '%';
+};
+var util = require('./src/util.js')(onupdate);
 var indexer = require('./src/indexer.js');
 var upload = null;
 
