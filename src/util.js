@@ -73,6 +73,27 @@ var render_posts = function(docs) {
   });
 };
 
+var addImages = function (evt) {
+  var files = evt.target.files;
+
+  // a FileList doesn't have a .forEach. Ugh.
+  var file;
+  for (var i = 0; file = files[i]; i++) {
+    var doc = {
+      content: file,
+      path: 'images/' + file.name,
+      title: file.name
+    };
+    upload([doc], onupdate, function(errs, docs) {
+      barf(errs);
+      docs.forEach(function(doc) {
+        var elem = document.getElementById('new_post');
+        elem.innerHTML = elem.innerHTML + '<br>!['+doc.title+']('+doc.uri+')'
+      });
+    });
+  }
+}
+
 var onupdate = null;
 module.exports = function(local_onupdate) {
   onupdate = local_onupdate;
@@ -151,6 +172,7 @@ module.exports = function(local_onupdate) {
     },
     historian: historian,
     compile_index: compile_index,
-    markup: markup
+    markup: markup,
+    addImages: addImages
   };
 };

@@ -19,7 +19,8 @@ module.exports = function(key, secret, bucket) {
   return function(docs, onupdate, cb) {
     var errs = [];
     docs.forEach(function(doc) {
-      upload(doc, onupdate, function(err) {
+      upload(doc, onupdate, function(err, returned) {
+        doc.uri = returned.Location;
         errs.push(err);
         if (errs.length === docs.length) {
           cb(errs, docs);
