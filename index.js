@@ -52,3 +52,14 @@ window.post_from_dom = function() {
 window.publish_all = util.publish_all;
 
 document.getElementById('imagesToAdd').addEventListener('change', util.addImages, false);
+
+window.delete_all_posts = function() {
+  db.query('posts/all', {
+    include_docs: true
+  }, function(err, res) {
+    _.pluck(res.rows, 'doc').forEach(function(doc) {
+      db.remove(doc);
+      //For some reason this can't just be passed to forEach. Something in pouchDB's promise library seems to be breaking it.
+    });
+  });
+};
