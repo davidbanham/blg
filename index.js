@@ -1,6 +1,9 @@
 var _ = require('lodash');
 var db = require('./src/db.js');
-var util = require('./src/util.js')();
+var onupdate = function(title, percentage) {
+  document.getElementById('status').textContent = title + ': ' + Math.floor(percentage * 100) + '%';
+};
+var util = require('./src/util.js')(onupdate);
 var indexer = require('./src/indexer.js');
 var upload = null;
 
@@ -48,21 +51,4 @@ window.post_from_dom = function() {
 
 window.publish_all = util.publish_all;
 
-window.addImages = function (evt) {
-  var files = evt.target.files;
-
-  // a FileList doesn't have a .forEach. Ugh.
-  var file;
-  for (var i = 0; file = files[i]; i++) {
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      var img = document.createElement('img');
-      img.src = e.target.result;
-      img.style.cssText = 'max-width: 100%;'
-      document.getElementById('new_post').appendChild(img);
-    };
-    reader.readAsDataURL(file);
-  }
-}
-
-document.getElementById('imagesToAdd').addEventListener('change', addImages, false);
+document.getElementById('imagesToAdd').addEventListener('change', util.addImages, false);
