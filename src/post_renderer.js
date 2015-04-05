@@ -1,6 +1,11 @@
 var mustache = require('mustache');
 var template = `
 <html>
+<head>
+  <style>
+    img { width: 100% }
+  </style>
+</head>
 <body>
   <a href="/">Home</a>
   <h2>{{title}}</h2>
