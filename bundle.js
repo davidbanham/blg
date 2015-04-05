@@ -57127,7 +57127,7 @@ module.exports = db;
 "use strict";
 
 var mustache = require("mustache");
-var template = "\n<html>\n<body>\n{{#posts}}\n  <h2><a href=\"{{path}}\">{{title}}</a></h2>\n  <p>{{{content}}}</p>\n{{/posts}}\n</body>\n</html>\n";
+var template = "\n<html>\n<head>\n  <style>\n    img { width: 100% }\n  </style>\n</head>\n<body>\n{{#posts}}\n  <h2><a href=\"{{path}}\">{{title}}</a></h2>\n  <p>{{{content}}}</p>\n{{/posts}}\n</body>\n</html>\n";
 
 module.exports = function (posts) {
   return mustache.render(template, { posts: posts });
@@ -57137,7 +57137,7 @@ module.exports = function (posts) {
 "use strict";
 
 var mustache = require("mustache");
-var template = "\n<html>\n<body>\n  <a href=\"/\">Home</a>\n  <h2>{{title}}</h2>\n  <p>{{{content}}}</p>\n  <a href=\"/{{previous.path}}\">{{previous.title}}</a>\n  <a href=\"/{{next.path}}\">{{next.title}}</a>\n</body>\n</html>\n";
+var template = "\n<html>\n<head>\n  <style>\n    img { width: 100% }\n  </style>\n</head>\n<body>\n  <a href=\"/\">Home</a>\n  <h2>{{title}}</h2>\n  <p>{{{content}}}</p>\n  <a href=\"/{{previous.path}}\">{{previous.title}}</a>\n  <a href=\"/{{next.path}}\">{{next.title}}</a>\n</body>\n</html>\n";
 
 module.exports = function (post) {
   return mustache.render(template, post);
