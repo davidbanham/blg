@@ -1,6 +1,7 @@
 var AWS = require('aws-sdk');
 var mimetype = require('mimetype');
 var path = require('path');
+var url = require('url');
 
 module.exports = function(key, secret, bucket) {
   AWS.config.accessKeyId = key;
@@ -20,7 +21,8 @@ module.exports = function(key, secret, bucket) {
     var errs = [];
     docs.forEach(function(doc) {
       upload(doc, onupdate, function(err, returned) {
-        doc.uri = returned.Location;
+        var sub_path = url.parse(returned.Location).path;
+        doc.uri = 'https:/' + sub_path;
         errs.push(err);
         if (errs.length === docs.length) {
           cb(errs, docs);
