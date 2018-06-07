@@ -57,5 +57,7 @@ It will also need a bucket policy like this one:
 
 Have fun!
 
+### Shout outs
+
 Cross browser testing provided by [BrowserStack](https://www.browserstack.com/)
 ![Browserstack Logo](https://p14.zdusercontent.com/attachment/1015988/E8WRN37LuCiyoljPWG1lEBCWU?token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..Fb4uRHL-lK_mtmC0OPBXtA.ilfZAUYBTNQu9Ezo5xWutfsL8EZ4RLIxsmfbED3pJzgqWv5CepmjvdgzT9XuwZd9nqtovQXawUHp3I2S8U0Vbc1Ze9WSn_JB9pk1L8IfCmzL9vs3zFqFzR4w8NofobdECcXpxrc6_ZepdOR2wmNLaCCmbt4O0-7o64JAKBAWac57xmuBCnf1yNNmrHvBFf_aLTRd7wK9EETh5MZFts0QN4OWSMgT2pl6IY210S3ABZwZWVR8XFngq4NyPkArvXzlDHQAXEOsgd09rloHmVUOe3OBZ8Q2NwWKrFoIwrnmjhU.bBSyVAmsLlesQU996ncLmA)
